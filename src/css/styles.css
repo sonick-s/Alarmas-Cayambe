@@ -1,0 +1,68 @@
+body {
+    min-height: auto;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background: url(/assets/img/fondo1.jpg);
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    /*background: linear-gradient(44deg, #6e6f77 10%, #eb2929 90%);*/
+}
+
+.login-container {
+    background-color: rgba(68, 65, 65, 0.226);
+    padding: 100px;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #ff1e00;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 10px 0;
+}
+
+button:hover {
+    background-color: #3b9dd648;
+}
+
+.social-login {
+    margin-top: 15px;
+}
+
+.google-btn {
+    background-color: white;
+    color: #000000;
+    border: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.google-btn img {
+    width: 20px;
+    margin-right: 10px;
+}
