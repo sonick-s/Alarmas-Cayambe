@@ -35,11 +35,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const result = await updateAlert(alertaId, updates);
 
     if (result) {
-      console.log(`La alerta con ID ${alertaId} ha sido actualizada.`);
-      alert(`La alerta con ID ${alertaId} ha sido actualizada.`);
+      console.log(`La alerta  ${alertaId} Ha sido atendida.`);
+      alert(`La alerta con ID ${alertaId} ha sido atendida.`);
     } else {
       console.log(`Error al actualizar la alerta con ID ${alertaId}`);
-      alert(`Error al actualizar la alerta con ID ${alertaId}`);
+      alert(`Error al atender la alerta ${alertaId}`);
     }
   }
 
