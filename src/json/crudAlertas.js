@@ -29,8 +29,14 @@ export async function getAllAlerts() {
     if (snapshot.exists()) {
       const alerts = snapshot.val();
 
-      // Invertir el orden de las alertas
-      const invertedAlerts = Object.values(alerts).reverse(); 
+      // Usar Object.entries para obtener tanto el id como los datos
+      const alertsWithId = Object.entries(alerts).map(([id, alerta]) => ({
+        id: id,  // Usamos el id de la clave
+        ...alerta // Añadimos los datos de la alerta
+      }));
+
+      // Invertir el orden de las alertas manteniendo el id
+      const invertedAlerts = alertsWithId.reverse();
 
       console.log("Alertas obtenidas (invertidas):", JSON.stringify(invertedAlerts, null, 2));
 
@@ -44,7 +50,6 @@ export async function getAllAlerts() {
     return null;
   }
 }
-
 
 export async function getLatest10Alerts() {
   try {
@@ -91,16 +96,28 @@ export function subscribeAlerts(callback) {
 }
 
 /**
- * Actualizar una alerta
- * @param {string} alertId 
- * @param {Object} updates 
+ * Actualizar el estado de una alerta
+ * @param {string} alertId
+ * @param {Object} updates
  * @returns {Promise<boolean>}
  */
+// Elimina solo el numeral (#) inicial si existe
+function limpiarIdFirebase(id) {
+  return id.replace(/^#/, '');
+}
+
 export async function updateAlert(alertId, updates) {
   try {
-    const alertToUpdateRef = ref(db, `alerts/${alertId}`);
-    await update(alertToUpdateRef, updates);
-    console.log(`Alerta ${alertId} actualizada con`, updates);
+    const idLimpio = limpiarIdFirebase(alertId); // solo quita el #
+    const alertToUpdateRef = ref(db, `alerts/${idLimpio}`);
+
+    const updateData = {
+      estado: updates.estado !== undefined ? updates.estado : false
+    };
+
+    await update(alertToUpdateRef, updateData);
+
+    console.log(`Alerta ${idLimpio} actualizada con estado:`, updates.estado);
     return true;
   } catch (error) {
     console.error(`Error actualizando alerta ${alertId}:`, error);
@@ -115,7 +132,8 @@ export async function updateAlert(alertId, updates) {
  */
 export async function deleteAlert(alertId) {
   try {
-    const alertToDeleteRef = ref(db, `alerts/${alertId}`);
+    const idLimpio = limpiarIdFirebase(alertId);
+    const alertToDeleteRef = ref(db, `alerts/${idLimpio}`);
     await remove(alertToDeleteRef);
     console.log(`Alerta ${alertId} eliminada`);
     return true;

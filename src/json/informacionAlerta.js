@@ -1,4 +1,4 @@
-import { getAllAlerts } from "./crudAlertas.js";
+import { getAllAlerts, updateAlert } from "./crudAlertas.js";
 
 async function mostrarAlertas() {
   try {
@@ -10,6 +10,46 @@ async function mostrarAlertas() {
     return []; // Devuelve arreglo vacío si falla
   }
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+  async function handleAlertUpdate() {
+    const alertaId = document.getElementById("alerta-id2").textContent;
+
+    // Verificar que el ID de alerta exista
+    if (!alertaId) {
+      console.error("No se encontró el ID de la alerta.");
+      alert("Error: No se encontró el ID de la alerta.");
+      return;
+    }
+
+    console.log("ID de la alerta:", alertaId);
+
+    // Datos a actualizar: solo el campo `estado`
+    const updates = {
+      estado: false // O el valor que deseas para el estado
+    };
+
+    console.log("Datos a actualizar:", updates);
+
+    // Llamada a la función para actualizar solo el estado de la alerta
+    const result = await updateAlert(alertaId, updates);
+
+    if (result) {
+      console.log(`La alerta con ID ${alertaId} ha sido actualizada.`);
+      alert(`La alerta con ID ${alertaId} ha sido actualizada.`);
+    } else {
+      console.log(`Error al actualizar la alerta con ID ${alertaId}`);
+      alert(`Error al actualizar la alerta con ID ${alertaId}`);
+    }
+  }
+
+  const alertaButton = document.getElementById("alerta-button");
+  alertaButton.addEventListener("click", handleAlertUpdate);
+});
+
+
+
+
 
 //Desde aqui empieza la funcion para mostrarla en las targetas y en el mapa
 let map;
@@ -23,7 +63,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (alertData.hasOwnProperty(id)) {
           const alerta = alertData[id];
           alertas.push({
-            id: `#${id}`, // Agrego # al id para que coincida con tu formato
+            id: `#${alerta.id}`, // Agrego # al id para que coincida con tu formato
             fecha: `${alerta.date}, ${alerta.time}`,
             ubicacion: alerta.address,
             lat: alerta.latitude.toString(),
