@@ -27,9 +27,14 @@ export async function getAllAlerts() {
   try {
     const snapshot = await get(alertsRef);
     if (snapshot.exists()) {
-      console.log("Alertas obtenidas:", JSON.stringify(snapshot.val(), null, 2));
+      const alerts = snapshot.val();
 
-      return snapshot.val();
+      // Invertir el orden de las alertas
+      const invertedAlerts = Object.values(alerts).reverse(); 
+
+      console.log("Alertas obtenidas (invertidas):", JSON.stringify(invertedAlerts, null, 2));
+
+      return invertedAlerts;
     } else {
       console.log("No hay alertas disponibles");
       return null;
@@ -39,6 +44,7 @@ export async function getAllAlerts() {
     return null;
   }
 }
+
 
 export async function getLatest10Alerts() {
   try {

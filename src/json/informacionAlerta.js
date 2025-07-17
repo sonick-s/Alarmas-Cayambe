@@ -1,8 +1,8 @@
-import { getLatest10Alerts } from "./crudAlertas.js";
+import { getAllAlerts } from "./crudAlertas.js";
 
 async function mostrarAlertas() {
   try {
-    const alertitas = await getLatest10Alerts();
+    const alertitas = await getAllAlerts();
     return alertitas;
   } catch (error) {
     console.error('Error al obtener alertas:', error);
@@ -16,7 +16,7 @@ let map;
 let marker;
 
 document.addEventListener("DOMContentLoaded", async function () {
-    const alertData = await mostrarAlertas();
+    const alertData = await getAllAlerts();
     const alertas = [];
 
     for (const id in alertData) {
@@ -94,8 +94,17 @@ document.addEventListener("DOMContentLoaded", async function () {
     const lat = parseFloat(alerta.lat);
     const lng = parseFloat(alerta.lng);
 
+    
+    const radarIcon = L.icon({
+        iconUrl: '../assets/img/radar.gif',
+        iconSize: [50, 50], // Tamaño del icono
+        iconAnchor: [16, 16], // Ancla el icono en el centro
+        popupAnchor: [0, -16] // Ajusta la posición del popup
+    });
+    
     map.setView([lat, lng], 16);
     marker.setLatLng([lat, lng])
+      .setIcon(radarIcon)
       .setPopupContent(`Alerta ${alerta.id}<br>${alerta.ubicacion}`)
       .openPopup();
   }
