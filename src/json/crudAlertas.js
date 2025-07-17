@@ -29,16 +29,19 @@ export async function getAllAlerts() {
     if (snapshot.exists()) {
       const alerts = snapshot.val();
 
-      // Usar Object.entries para obtener tanto el id como los datos
-      const alertsWithId = Object.entries(alerts).map(([id, alerta]) => ({
-        id: id,  // Usamos el id de la clave
-        ...alerta // Añadimos los datos de la alerta
-      }));
+      // Convertir a array con id y datos
+      const alertsWithId = Object.entries(alerts)
+        .map(([id, alerta]) => ({
+          id: id,
+          ...alerta
+        }))
+        // Filtrar las alertas donde estado no sea false
+        .filter(alerta => alerta.estado !== false);
 
-      // Invertir el orden de las alertas manteniendo el id
+      // Invertir el orden
       const invertedAlerts = alertsWithId.reverse();
 
-      console.log("Alertas obtenidas (invertidas):", JSON.stringify(invertedAlerts, null, 2));
+      console.log("Alertas obtenidas (filtradas e invertidas):", JSON.stringify(invertedAlerts, null, 2));
 
       return invertedAlerts;
     } else {
@@ -50,6 +53,7 @@ export async function getAllAlerts() {
     return null;
   }
 }
+
 
 export async function getLatest10Alerts() {
   try {
