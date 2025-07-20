@@ -15,8 +15,6 @@ function initMap() {
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
-
-    // Mover el control de zoom a la parte inferior derecha
     L.control.zoom({ position: 'bottomright' }).addTo(map);
 
     map.doubleClickZoom.disable();
@@ -34,3 +32,21 @@ window.addEventListener('resize', function () {
         map.invalidateSize();
     }
 });
+
+// Importar Nav.html en el contenedor correspondiente
+fetch('Nav.html')
+.then(response => response.text())
+.then(html => {
+  document.getElementById('nav-container').innerHTML = html;
+});
+
+
+
+//Funciones para el Modal de agregar ubicaciones
+function openLocationModal() {
+    document.getElementById("locationModal").style.display = "block";
+}
+
+function closeLocationModal() {
+    document.getElementById("locationModal").style.display = "none";
+}
