@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
     <link rel="stylesheet" href="../css/vistaAlarma.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
-    <script type="module" src="../json/controladorAlarmas.js"></script>
+    <script src="../json/controladorAlarmas.js"></script>
 </head>
 
 <body>
@@ -43,7 +43,11 @@
                 <h3 class="modal-title" id="modal-title">Agregar Nueva Ubicación</h3>
                 <span class="close" onclick="closeLocationModal()">&times;</span>
             </div>
-            <form id="locationForm" onsubmit="capturarDatosForm(event)">
+            <form id="locationForm">
+                <div class="form-group">
+                    <label for="form-group">Dirección ip</label>
+                    <input type="text" id="locationIp" name="ip" required>
+                </div>
                 <div class="form-group">
                     <label for="locationName">Nombre de la Ubicación</label>
                     <input type="text" id="locationName" name="name" required>
@@ -51,10 +55,6 @@
                 <div class="form-group">
                     <label for="locationDescription">Descripción</label>
                     <textarea id="locationDescription" name="description"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="form-group">Dirección ip</label>
-                    <input type="text" id="locationIp" name="ip" required>
                 </div>
                 <div class="form-group">
                     <label for="locationLat">Latitud</label>
@@ -71,5 +71,7 @@
             </form>
         </div>
     </div>
+
 </body>
+
 </html>

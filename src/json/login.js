@@ -1,20 +1,9 @@
-// Configuración de Firebase (proyecto alarmasmart-204e2)
-const firebaseConfig = {
-  apiKey: "AIzaSyAsG8KqXW8-kyEgKfoFmHRD9SLcsplXXEg",
-  authDomain: "alarmasmart-204e2.firebaseapp.com",
-  databaseURL: "https://alarmasmart-204e2-default-rtdb.firebaseio.com",
-  projectId: "alarmasmart-204e2",
-  storageBucket: "alarmasmart-204e2.firebasestorage.app",
-  messagingSenderId: "949843163488",
-  appId: "1:949843163488:web:331c275413ad01250dc605",
-  measurementId: "G-3F4M51TM9H"
-};
-
-// Inicializar Firebase
-firebase.initializeApp(firebaseConfig);
+// Importar autenticación de Firebase desde la configuración centralizada
+import { auth } from "./firebaseConfig.js";
+import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
 // Proveedor de autenticación de Google
-const googleProvider = new firebase.auth.GoogleAuthProvider();
+const googleProvider = new GoogleAuthProvider();
 
 // Login con email y contraseña
 document.getElementById('loginForm').addEventListener('submit', function(e) {
@@ -22,7 +11,7 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
 
-  firebase.auth().signInWithEmailAndPassword(email, password)
+  signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       redirigirDashboard();
     })
@@ -33,7 +22,7 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
 
 // Login con Google
 document.getElementById('googleLogin').addEventListener('click', function() {
-  firebase.auth().signInWithPopup(googleProvider)
+  signInWithPopup(auth, googleProvider)
     .then((result) => {
       redirigirDashboard();
     })
@@ -47,11 +36,10 @@ function redirigirDashboard() {
 }
 
 // Verificar estado de autenticación
-firebase.auth().onAuthStateChanged((user) => {
+onAuthStateChanged(auth, (user) => {
   if (user) {
     console.log('Usuario autenticado:', user.email);
   } else {
     console.log('No hay usuario autenticado');
   }
 });
- 
