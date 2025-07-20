@@ -11,7 +11,9 @@ Tareas
 - [*] configurar un crud para las alertas
 - [*] servir el json extraido desde firebase a las tagetas
 
+Nueva presentacion
+- [] Ajustar Logo
 
 
-
-
+Recomendaciones
+ Para activar la alarma mas cercana deberia haber un comparador de longitud y latitud , suponiendo que este a menos de 100 metros de la ubicacion del usuario 

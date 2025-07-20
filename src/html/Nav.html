@@ -1,0 +1,58 @@
+<nav class="horizontal-nav">
+  <div class="logo">
+    <img src="../assets/img/Logo ECU 911.png" alt="Logo" style="width: 32px; height: 32px;">
+  </div>
+  <div class="nav-title">Alarma Emart ECU911</div>
+  <button class="nav-btn" onclick="location.href='/'"><span class="nav-icon">🏠</span>Home</button>
+  <button class="nav-btn active" onclick="location.href='vistaAlarmas.html'"><span class="nav-icon">➕</span>Agregar Alarma</button>
+  <button class="nav-btn" onclick="location.href='dashboard.html'"><span class="nav-icon">📊</span>Dashboard</button>
+</nav>
+
+<style>
+    #nav-container {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+        padding: 0.25rem 0;
+      }
+    .horizontal-nav {
+      max-width: 900px;
+      margin: 16px auto 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #fff;
+      border-bottom: 1px solid #eee;
+      padding: 0.5rem 0;
+      gap: 1.5rem;
+      box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.06);
+      font-family: 'Segoe UI', Arial, sans-serif;
+      border-radius: 2rem;
+      border: 1px solid #eee;
+      position: relative;
+      margin-bottom: 0.5rem;
+    }
+    .nav-btn {
+      background: none;
+      border: none;
+      color: #1a237e;
+      font-size: 1rem;
+      padding: 0.5rem 1.2rem;
+      margin: 0 0.2rem;
+      border-radius: 2rem;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .nav-btn.active, .nav-btn:hover {
+      background: #1a237e;
+      color: #fff;
+    }
+    .nav-icon {
+      font-size: 1.2em;
+      display: inline-block;
+    }
+  </style>

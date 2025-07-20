@@ -43,7 +43,7 @@ document.getElementById('googleLogin').addEventListener('click', function() {
 });
 
 function redirigirDashboard() {
-  window.location.href = 'src/html/agregarAlarma.html';
+  window.location.href = 'src/html/vistaAlarmas.html';
 }
 
 // Verificar estado de autenticación

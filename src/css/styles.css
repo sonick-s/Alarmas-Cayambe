@@ -6,11 +6,11 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    background: url(/assets/img/fondo1.jpg);
+    background-image: url("../assets/img/ecuadorSeguro.gif");
+    background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
     background-attachment: fixed;
-    /*background: linear-gradient(44deg, #6e6f77 10%, #eb2929 90%);*/
 }
 
 .login-container {
