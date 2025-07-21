@@ -6,7 +6,7 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-image: url("../assets/img/ecuadorSeguro.gif");
+    background-image: url("../assets/img/fondo2.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
@@ -14,10 +14,10 @@ body {
 }
 
 .login-container {
-    background-color: rgba(68, 65, 65, 0.226);
+    background-color: rgba(255, 255, 255, 0.867);
     padding: 100px;
     border-radius: 15px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 8px rgba(255, 27, 27, 0.552);
     width: 300px;
     text-align: center;
 }
@@ -35,8 +35,8 @@ input {
 }
 
 button {
-    background-color: #ff1e00;
-    color: white;
+    background-color: #da5858;
+    color: rgb(255, 255, 255);
     border: none;
     padding: 10px;
     border-radius: 4px;
@@ -45,7 +45,7 @@ button {
 }
 
 button:hover {
-    background-color: #3b9dd648;
+    background-color: #a2a2a2;
 }
 
 .social-login {
@@ -60,6 +60,7 @@ button:hover {
     align-items: center;
     justify-content: center;
     width: 100%;
+    border-radius: 4px;
 }
 
 .google-btn img {
