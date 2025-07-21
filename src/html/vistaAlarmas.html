@@ -23,12 +23,10 @@
     </div>
 
     <div class="floating-bar">
-        <button class="add-btn" id="openModalBtn" onclick="openLocationModal()">➕ Agregar ubicaciones</button>
-        <div class="info-card">
-            <h4>Información</h4>
-            <p>Administra tus ubicaciones favoritas de manera rápida y sencilla.</p>
-            <p style="font-size:0.9em;color:#666;">Puedes agregar, editar o eliminar ubicaciones en cualquier momento.
-            </p>
+        <h3 style="text-align:center">Información de la Alarmas</h3>
+        <div style="max-height: 600px; overflow-y: auto; margin-bottom: 10px;" id="contenedor-alarmas"></div>
+        <div style="display:flex; justify-content:center; margin-bottom:10px;">
+            <button class="add-btn" id="openModalBtn" onclick="openLocationModal()">➕ Agregar ubicaciones</button>
         </div>
         <footer>
             <p> 2025 Alarma Emart ECU911</p>
@@ -72,4 +70,5 @@
         </div>
     </div>
 </body>
+
 </html>

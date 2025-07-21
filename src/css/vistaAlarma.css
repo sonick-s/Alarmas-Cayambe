@@ -516,7 +516,6 @@ box-shadow: 0 8px 20px -5px rgba(102, 126, 234, 0.4);
     padding: 0.7rem 1.2rem;
     cursor: pointer;
     font-weight: 500;
-    transition: background 0.2s;
     box-shadow: 0 2px 8px 0 rgba(26,35,126,0.06);
   }
   .add-btn:hover {
