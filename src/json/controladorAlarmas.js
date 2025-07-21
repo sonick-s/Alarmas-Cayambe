@@ -1,16 +1,29 @@
-import { createAlarma, subscribeAlarmas, getAlarmaById, updateAlarma } from "./crudAlarmas.js";
+import { createAlarma, subscribeAlarmas, getAlarmaById, updateAlarma, getAllAlarmas } from "./crudAlarmas.js";
 let map;
-
+let markerAlarma = null; // marcador global para la alarma actual
+let grupoMarcadores = null;
 // Inicializar el mapa
 function initMap() {
-    const ecuadorLat = -1.831239;
-    const ecuadorLng = -78.183406;
+    //Ubicacion ecuador CAYAMBE
+    const ecuadorLat = 0.04103;
+    const ecuadorLng = -78.14636;
 
-    map = L.map('map', { zoomControl: false }).setView([ecuadorLat, ecuadorLng], 7);
+    // Definir capas base
+    const openStreetMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+       
+    });
+    const esriSat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+       
+    });
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
+    const baseLayers = {
+        "OpenStreetMap": openStreetMap,
+        "Satélite Esri": esriSat
+    };
+
+    map = L.map('map', { zoomControl: false, layers: [openStreetMap] }).setView([ecuadorLat, ecuadorLng], 7);
+
+    L.control.layers(baseLayers).addTo(map);
     L.control.zoom({ position: 'bottomright' }).addTo(map);
 
     map.doubleClickZoom.disable();
@@ -19,8 +32,8 @@ function initMap() {
     map.keyboard.disable();
 
     document.getElementById('loading').style.display = 'none';
-
 }
+
 
 window.addEventListener('load', () => {
     initMap();
@@ -99,6 +112,22 @@ fetch('Nav.html')
 
 // Función para renderizar tarjetas de alarmas en el contenedor
 function renderizarAlarmas(alarmasObj) {
+    // Función para mostrar un punto en el mapa
+    function mostrarPuntoEnMapa(lat, lng, popupHtml = null) {
+        if (!map) return;
+        if (map._grupoMarcadoresLayer) {
+            map.removeLayer(map._grupoMarcadoresLayer);
+        }
+        if (markerAlarma) {
+            map.removeLayer(markerAlarma);
+        }
+        markerAlarma = L.marker([lat, lng]).addTo(map);
+        if (popupHtml) {
+            markerAlarma.bindPopup(popupHtml).openPopup();
+        }
+        map.setView([lat, lng], 15);
+    }
+
     window.abrirModalEditar = async function(id) {
         openLocationModal();
         if (typeof getAlarmaById === 'function') {
@@ -146,6 +175,49 @@ function renderizarAlarmas(alarmasObj) {
                 </button>
             </div>
         `;
+        // Botón "Ver ubicación"
+        const verUbicacionBtn = tarjeta.querySelector('button[title="Ver ubicación"]');
+        if (verUbicacionBtn) {
+            verUbicacionBtn.addEventListener('click', () => {
+                if (alarma.lat && alarma.lng) {
+                    mostrarPuntoEnMapa(parseFloat(alarma.lat), parseFloat(alarma.lng), `<b>${alarma.name || ''}</b><br>${alarma.description || ''}`);
+                } else {
+                    alert('No hay coordenadas para esta alarma');
+                }
+            });
+        }
         contenedor.appendChild(tarjeta);
     });
 }
+
+//Crea una funcion usando getAllAlarmas para mostrar las ubicaciones en el mapa al cargar el documento
+window.addEventListener('load', () => {
+    getAllAlarmas().then(alarmas => {
+        if (!map) return;
+        // Guardar las ubicaciones en la variable global grupoMarcadores
+        grupoMarcadores = alarmas
+            .filter(alarma => alarma.lat && alarma.lng)
+            .map(alarma => ({
+                lat: alarma.lat,
+                lng: alarma.lng,
+                name: alarma.name || '',
+                description: alarma.description || ''
+            }));
+        // Mostrar por consola todas las ubicaciones usadas
+        console.log('Ubicaciones usadas en el mapa:', grupoMarcadores);
+        // Limpiar marcadores anteriores si existen
+        if (map._grupoMarcadoresLayer) {
+            map.removeLayer(map._grupoMarcadoresLayer);
+        }
+        // Crear grupo de marcadores
+        const layerGroup = L.layerGroup();
+        grupoMarcadores.forEach(ubi => {
+            const marker = L.marker([parseFloat(ubi.lat), parseFloat(ubi.lng)])
+                .bindPopup(`<b>${ubi.name}</b><br>${ubi.description}`);
+            layerGroup.addLayer(marker);
+        });
+        layerGroup.addTo(map);
+        map._grupoMarcadoresLayer = layerGroup;
+        // NO mover la vista, mantener centrado en Ecuador
+    });
+});
