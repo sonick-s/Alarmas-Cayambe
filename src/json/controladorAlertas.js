@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   }
 
-  initMap([0.04103, -78.14636], 16);
+  initMap([0.04103, -78.14636], 7);
   createDefaultMarker(alertas[0]);
 
   const contenedor = document.getElementById("contenedor-alertas");
@@ -98,7 +98,13 @@ document.addEventListener("DOMContentLoaded", async function () {
   function createDefaultMarker(alerta) {
     const lat = parseFloat(alerta.lat);
     const lng = parseFloat(alerta.lng);
-    marker = L.marker([lat, lng])
+    const radarIcon = L.icon({
+      iconUrl: '../assets/img/advertencia.gif',
+      iconSize: [50, 50], // Tamaño del icono
+      iconAnchor: [16, 16], // Ancla el icono en el centro
+      popupAnchor: [0, -16] // Ajusta la posición del popup
+    });
+    marker = L.marker([lat, lng], { icon: radarIcon })
       .addTo(map)
       .bindPopup(`Alerta ${alerta.id}<br>${alerta.ubicacion}`)
       .openPopup();
@@ -149,7 +155,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
     const radarIcon = L.icon({
-      iconUrl: '../assets/img/radar.gif',
+      iconUrl: '../assets/img/advertencia.gif',
       iconSize: [50, 50], // Tamaño del icono
       iconAnchor: [16, 16], // Ancla el icono en el centro
       popupAnchor: [0, -16] // Ajusta la posición del popup

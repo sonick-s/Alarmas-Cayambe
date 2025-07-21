@@ -4,8 +4,9 @@
     <img src="../assets/img/Ecu911.png" alt="Logo">
   </div>
   <div class="nav-title">Alarma Emart ECU911</div>
-  <button class="nav-btn" onclick="location.href='vistaAlarmas.html'">Agregar Alarma</button>
-  <button class="nav-btn" onclick="location.href='vistaInsidencias.html'">Dashboard</button>
+  <button class="nav-btn" onclick="location.href='vistaAlarmas.html'">Alarma</button>
+  <button class="nav-btn" onclick="location.href='vistaInsidencias.html'">Insidencia</button>
+  <button class="btn-danger" onclick="location.href='login.html'">Cerrar Sesión</button>
 </nav>
 
 <style>
@@ -56,5 +57,20 @@
       background: #1a237e;
       color: #fff;
     }
-    
+    .btn-danger {
+      background: #dc3545;
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1.2rem;
+      margin: 0 0.2rem;
+      border-radius: 2rem;
+      cursor: pointer;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-danger:hover {
+      background: #c82333;
+    }
   </style>
