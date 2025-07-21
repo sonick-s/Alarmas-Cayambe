@@ -1,5 +1,34 @@
-Proyecto para instalar en un servidor XamPP O WAMpp
+# Alarma Smart ECU911 
 
+Guía para la instalación, configuración y ejecución de la API del proyecto **Alarma Smart ECU911**.
+
+---
+
+## 🚀 Descripcion
+
+Este proyecto fue realizado en el año 2025 , con el fin de mejorar la seguridad de las personas que viven en la ciudad de Cayambe , Ecuador
+la base tecnica de este fue html Css y JavaScript , Como bakend se uso Firebase claund y como base de datos se uso Firebase Realtime Database
+
+## Contribuidores
+
+1. [Omar Sani](https://github.com/sonick-s/)
+2. [Darwin Campues](https://github.com/sonick-s/)
+3. [Micheale Garcia](https://github.com/sonick-s/)
+4. [Stalin Fernandez](https://github.com/sonick-s/)
+5. [Anonimo](https://github.com/sonick-s/)
+
+## Deploy
+
+El proyecto se puede levantar en cualquier servidor web que soporte html css y JavaScript sea hosting o vps
+Consideracion : 
+- Debe tener una cuenta de firebase para consumir la api de firebase
+- Configurar el proyecto con sus credenciales de firebase
+- Verificar que el proyecto en firebase este activo
+- El archivo Db_Firebase.json esta en el archivo Base de datos que se deb subir en firebase , cuenta como respaldo de la base de datos original a usar en Firebase.json
+
+## ⚠️ Tareas urgentes
+**¡IMPORTANTE!**  
+Tareas que fueron Realizadas
 
 
 Tareas 
@@ -11,9 +40,3 @@ Tareas
 - [*] configurar un crud para las alertas
 - [*] servir el json extraido desde firebase a las tagetas
 
-Nueva presentacion
-- [] Ajustar Logo
-
-
-Recomendaciones
- Para activar la alarma mas cercana deberia haber un comparador de longitud y latitud , suponiendo que este a menos de 100 metros de la ubicacion del usuario 
