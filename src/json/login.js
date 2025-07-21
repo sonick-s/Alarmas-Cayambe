@@ -32,7 +32,7 @@ document.getElementById('googleLogin').addEventListener('click', function() {
 });
 
 function redirigirDashboard() {
-  window.location.href = 'src/html/vistaAlarmas.html';
+  window.location.href = 'src/html/vistaInsidencias.html';
 }
 
 // Verificar estado de autenticación

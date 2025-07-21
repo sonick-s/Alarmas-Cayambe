@@ -3,9 +3,8 @@
     <img src="../assets/img/Logo ECU 911.png" alt="Logo" style="width: 32px; height: 32px;">
   </div>
   <div class="nav-title">Alarma Emart ECU911</div>
-  <button class="nav-btn" onclick="location.href='/'"><span class="nav-icon">🏠</span>Home</button>
-  <button class="nav-btn active" onclick="location.href='vistaAlarmas.html'"><span class="nav-icon">➕</span>Agregar Alarma</button>
-  <button class="nav-btn" onclick="location.href='dashboard.html'"><span class="nav-icon">📊</span>Dashboard</button>
+  <button class="nav-btn" onclick="location.href='vistaAlarmas.html'">Agregar Alarma</button>
+  <button class="nav-btn" onclick="location.href='vistaInsidencias.html'">Dashboard</button>
 </nav>
 
 <style>
@@ -36,23 +35,20 @@
     .nav-btn {
       background: none;
       border: none;
-      color: #1a237e;
+      color: #717171;
       font-size: 1rem;
       padding: 0.5rem 1.2rem;
       margin: 0 0.2rem;
       border-radius: 2rem;
       cursor: pointer;
-      transition: background 0.2s, color 0.2s;
+      transition: 0.2s;
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
-    .nav-btn.active, .nav-btn:hover {
+    .nav-btn:hover {
       background: #1a237e;
       color: #fff;
     }
-    .nav-icon {
-      font-size: 1.2em;
-      display: inline-block;
-    }
+    
   </style>

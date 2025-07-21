@@ -11,6 +11,13 @@ async function mostrarAlertas() {
   }
 }
 
+    // Importar Nav.html en el contenedor correspondiente
+    fetch('Nav.html')
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('nav-container').innerHTML = html;
+        });
+
 document.addEventListener("DOMContentLoaded", function () {
   async function handleAlertUpdate() {
     const alertaId = document.getElementById("alerta-id2").textContent;
