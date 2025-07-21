@@ -7,7 +7,7 @@ async function mostrarAlertas() {
   } catch (error) {
     console.error('Error al obtener alertas:', error);
     document.getElementById('alertsOutput').textContent = 'Error al obtener alertas.';
-    return []; // Devuelve arreglo vacío si falla
+    return [];
   }
 }
 
@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", function () {
   async function handleAlertUpdate() {
     const alertaId = document.getElementById("alerta-id2").textContent;
 
-    // Verificar que el ID de alerta exista
     if (!alertaId) {
       console.error("No se encontró el ID de la alerta.");
       alert("Error: No se encontró el ID de la alerta.");
@@ -24,14 +23,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     console.log("ID de la alerta:", alertaId);
 
-    // Datos a actualizar: solo el campo `estado`
     const updates = {
-      estado: false // O el valor que deseas para el estado
+      estado: false
     };
 
     console.log("Datos a actualizar:", updates);
 
-    // Llamada a la función para actualizar solo el estado de la alerta
     const result = await updateAlert(alertaId, updates);
 
     if (result) {
@@ -56,25 +53,25 @@ let map;
 let marker;
 
 document.addEventListener("DOMContentLoaded", async function () {
-    const alertData = await getAllAlerts();
-    const alertas = [];
+  const alertData = await getAllAlerts();
+  const alertas = [];
 
-    for (const id in alertData) {
-        if (alertData.hasOwnProperty(id)) {
-          const alerta = alertData[id];
-          alertas.push({
-            id: `#${alerta.id}`, // Agrego # al id para que coincida con tu formato
-            fecha: `${alerta.date}, ${alerta.time}`,
-            ubicacion: alerta.address,
-            lat: alerta.latitude.toString(),
-            lng: alerta.longitude.toString(),
-            contacto: "Desconocido",  // app movil no envia el contacto
-            telefono: "N/A"           // app movil no envia el telefono
-          });
-        }
-      }
+  for (const id in alertData) {
+    if (alertData.hasOwnProperty(id)) {
+      const alerta = alertData[id];
+      alertas.push({
+        id: `#${alerta.id}`, // Agrego # al id para que coincida con tu formato
+        fecha: `${alerta.date}, ${alerta.time}`,
+        ubicacion: alerta.address,
+        lat: alerta.latitude.toString(),
+        lng: alerta.longitude.toString(),
+        contacto: "Desconocido",  // app movil no envia el contacto
+        telefono: "N/A"           // app movil no envia el telefono
+      });
+    }
+  }
 
-  initMap([0.046045, -78.202168], 16);
+  initMap([0.04103, -78.14636], 16);
   createDefaultMarker(alertas[0]);
 
   const contenedor = document.getElementById("contenedor-alertas");
@@ -87,7 +84,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   function initMap(center, zoom) {
     map = L.map('map').setView(center, zoom);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors'
     }).addTo(map);
   }
 
@@ -107,13 +103,23 @@ document.addEventListener("DOMContentLoaded", async function () {
     tarjeta.className = "alerta";
 
     tarjeta.innerHTML = `
-      <h4>Alerta <span class="alerta-id">${alerta.id}</span></h4>
-      <small>
-        <p><strong>Hora:</strong> <span>${alerta.fecha}</span></p><br>
-        <p><strong>Dirección:</strong> <span>${alerta.ubicacion}</span></p>
-      </small>
-      <button class="estado">Ver Evento</button>
-    `;
+    <div class="info-card">
+    <ul style="font-size:0.95em; color:#333; list-style:none; padding:0;">
+      <li><b>Evento:</b>${alerta.id}</li>
+      <br>
+      <li><b>Fecha:</b>${alerta.fecha}</li>
+      <li><b>Ubicación:</b>${alerta.ubicacion}</li>
+      <div style="display:flex; justify-content:flex-end; align-items:right; gap:8px; margin-bottom:8px;">
+        <button class="estado" title="Ver Evento" style="background:none; border:none; cursor:pointer; font-size:1.3em; padding:4px;">
+          <svg height="20" width="20" viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <circle cx="12" cy="12" r="4" />
+          </svg>
+        </button>
+      </div>
+    </ul>
+    </div>
+      `;
 
     tarjeta.querySelector(".estado").addEventListener("click", () => {
       mostrarDetalle(alerta);
@@ -134,21 +140,19 @@ document.addEventListener("DOMContentLoaded", async function () {
     const lat = parseFloat(alerta.lat);
     const lng = parseFloat(alerta.lng);
 
-    
+
     const radarIcon = L.icon({
-        iconUrl: '../assets/img/radar.gif',
-        iconSize: [50, 50], // Tamaño del icono
-        iconAnchor: [16, 16], // Ancla el icono en el centro
-        popupAnchor: [0, -16] // Ajusta la posición del popup
+      iconUrl: '../assets/img/radar.gif',
+      iconSize: [50, 50], // Tamaño del icono
+      iconAnchor: [16, 16], // Ancla el icono en el centro
+      popupAnchor: [0, -16] // Ajusta la posición del popup
     });
-    
+
     map.setView([lat, lng], 16);
     marker.setLatLng([lat, lng])
       .setIcon(radarIcon)
       .setPopupContent(`Alerta ${alerta.id}<br>${alerta.ubicacion}`)
       .openPopup();
   }
-  
-  
 });
 

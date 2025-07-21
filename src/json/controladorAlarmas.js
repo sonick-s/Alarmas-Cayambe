@@ -71,7 +71,6 @@ function capturarDatosForm(event){
     for (let [key, value] of data.entries()) {
         alarma[key] = value;
     }
-    // Agregar fecha actual y estado false
     alarma.timestamp = new Date().toISOString();
     alarma.estado = false;
 
@@ -203,13 +202,10 @@ window.addEventListener('load', () => {
                 name: alarma.name || '',
                 description: alarma.description || ''
             }));
-        // Mostrar por consola todas las ubicaciones usadas
         console.log('Ubicaciones usadas en el mapa:', grupoMarcadores);
-        // Limpiar marcadores anteriores si existen
         if (map._grupoMarcadoresLayer) {
             map.removeLayer(map._grupoMarcadoresLayer);
         }
-        // Crear grupo de marcadores
         const layerGroup = L.layerGroup();
         grupoMarcadores.forEach(ubi => {
             const marker = L.marker([parseFloat(ubi.lat), parseFloat(ubi.lng)])
@@ -218,6 +214,5 @@ window.addEventListener('load', () => {
         });
         layerGroup.addTo(map);
         map._grupoMarcadoresLayer = layerGroup;
-        // NO mover la vista, mantener centrado en Ecuador
     });
 });
