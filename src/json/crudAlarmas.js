@@ -57,6 +57,7 @@ export async function getAllAlarmas() {
     }
 }
 
+
 // Obtener una alarma por ID
 export async function getAlarmaById(id) {
     try {

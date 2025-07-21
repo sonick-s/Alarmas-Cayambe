@@ -1,4 +1,5 @@
 import { getAllAlerts, updateAlert } from "./crudAlertas.js";
+import { getAllAlarmas } from "./crudAlarmas.js";
 
 async function mostrarAlertas() {
   try {
@@ -11,7 +12,7 @@ async function mostrarAlertas() {
   }
 }
 
-    // Importar Nav.html en el contenedor correspondiente
+    // Importar la barra de navegacion en el contenedor correspondiente
     fetch('Nav.html')
         .then(response => response.text())
         .then(html => {
@@ -94,7 +95,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }).addTo(map);
   }
 
-  // Función para crear un marcador por defecto
+  // Función para mostrar la insidencia mas actual al iniciar la pagina
   function createDefaultMarker(alerta) {
     const lat = parseFloat(alerta.lat);
     const lng = parseFloat(alerta.lng);
@@ -104,10 +105,13 @@ document.addEventListener("DOMContentLoaded", async function () {
       iconAnchor: [16, 16], // Ancla el icono en el centro
       popupAnchor: [0, -16] // Ajusta la posición del popup
     });
+    mostrarAlarmas();
     marker = L.marker([lat, lng], { icon: radarIcon })
       .addTo(map)
       .bindPopup(`Alerta ${alerta.id}<br>${alerta.ubicacion}`)
       .openPopup();
+      // Mostrar la alarma más cercana dentro de 10 km
+  mostrarAlarmaMasCercana(lat, lng);
   }
 
   // Función para crear la tarjeta de alerta en el DOM
@@ -166,6 +170,63 @@ document.addEventListener("DOMContentLoaded", async function () {
       .setIcon(radarIcon)
       .setPopupContent(`Alerta ${alerta.id}<br>${alerta.ubicacion}`)
       .openPopup();
+      // Mostrar la alarma más cercana dentro de 10 km
+  mostrarAlarmaMasCercana(lat, lng);
   }
 });
 
+// Función para mostrar las alarmas por consola
+async function mostrarAlarmas() {
+  const alarmas = await getAllAlarmas();
+  console.log("Alarmas obtenidas:", alarmas);
+}
+
+function calcularDistancia(lat1, lon1, lat2, lon2) {
+  const R = 6371000;
+  const toRad = x => x * Math.PI / 180;
+
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+  const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c; // Distancia en metros
+}
+async function mostrarAlarmaMasCercana(latReferencia, lonReferencia) {
+  const alarmas = await getAllAlarmas();
+
+  let alarmaMasCercana = null;
+  let distanciaMinima = Infinity;
+
+  for (const alarma of alarmas) {
+    const lat = parseFloat(alarma.lat);
+    const lng = parseFloat(alarma.lng);
+
+    if (lat !== 0 && lng !== 0) {
+      const distancia = calcularDistancia(
+        latReferencia,
+        lonReferencia,
+        lat,
+        lng
+      );
+
+      if (distancia <= 10000 && distancia < distanciaMinima) {
+        distanciaMinima = distancia;
+        alarmaMasCercana = { ...alarma, lat, lng }; // guardamos también los valores parseados
+      }
+    }
+  }
+
+  if (alarmaMasCercana) {
+    console.log(`Alarma más cercana (ID: ${alarmaMasCercana.id}) a ${distanciaMinima.toFixed(2)} m`);
+
+    L.marker([alarmaMasCercana.lat, alarmaMasCercana.lng])
+      .addTo(map)
+      .bindPopup(`Alarma más cercana<br>ID: ${alarmaMasCercana.id}<br>${alarmaMasCercana.ubicacion}`)
+      .openPopup();
+  } else {
+    console.log("No hay alarmas dentro de un radio de 10 km.");
+  }
+}
