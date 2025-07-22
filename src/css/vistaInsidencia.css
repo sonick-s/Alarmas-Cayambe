@@ -635,3 +635,52 @@ box-shadow: 0 8px 20px -5px rgba(102, 126, 234, 0.4);
     width: auto;
   }
 }
+
+ /* Botón personalizado */
+ .boton-historial {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    border: none;
+    background-color: #ffffff;
+    color: #1a237e;
+    height: auto;
+    cursor: pointer;
+}
+
+/* Fondo del modal */
+.modal-historial {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    right: 0;
+    bottom: 0; /* En lugar de top: 0 */
+    width: 400px;
+    height: 90%; /* Ajusta la altura si no quieres que sea de 100% */
+    max-height: 88%; /* Opcional: para evitar que ocupe toda la pantalla */
+    background-color: #ffffff;
+    box-shadow: -4px 0 10px rgba(0,0,0,0.2);
+    overflow-y: auto;
+    transition: transform 0.3s ease;
+    border-radius: 5% 0 0 0; /* Esquinas redondeadas solo arriba a la izquierda */
+}
+
+
+/* Contenido interno del modal */
+.modal-contenido {
+    padding: 20px;
+    position: relative;
+}
+
+/* Botón de cerrar */
+.cerrar-modal {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+}

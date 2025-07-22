@@ -1,4 +1,4 @@
-import { getAllAlerts, updateAlert } from "./crudAlertas.js";
+import { getAllAlerts, updateAlert, subscribeAlerts } from "./crudAlertas.js";
 import { getAllAlarmas } from "./crudAlarmas.js";
 
 let markerAlarma = null; // marcador global para la alarma actual
@@ -281,4 +281,54 @@ function mostrarUbicacionesEnMapa() {
       layerGroup.addTo(map);
       map._grupoMarcadoresLayer = layerGroup;
   });
+}
+const boton = document.getElementById("boton_historial");
+const modal = document.getElementById("modal_historial");
+const cerrar = document.getElementById("cerrar_modal");
+
+boton.addEventListener("click", () => {
+    modal.style.display = "block";
+    mostrarHistorialEnTabla();
+});
+
+cerrar.addEventListener("click", () => {
+    modal.style.display = "none";
+});
+
+window.addEventListener("click", (e) => {
+    if (e.target === modal) {
+        modal.style.display = "none";
+    }
+});
+
+function mostrarHistorialEnTabla() {
+    const tbody = document.querySelector('#modal_historial table tbody');
+
+    subscribeAlerts((data) => {
+        tbody.innerHTML = '';
+
+        if (!data || Object.keys(data).length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5">No hay datos disponibles</td></tr>';
+            return;
+        }
+
+        Object.values(data).forEach((alerta) => {
+            const fila = document.createElement('tr');
+            const fechaHora = `${alerta.date ?? 'Sin fecha'} ${alerta.time ?? ''}`;
+            const direccion = alerta.address || 'N/A';
+            const coordenadas = `${alerta.latitude ?? 'N/A'}°, ${alerta.longitude ?? 'N/A'}°`;
+            const contacto = alerta.contact || 'Desconocido';
+            const telefono = alerta.phone || 'Desconocido';
+
+            fila.innerHTML = `
+                <td>${fechaHora}</td>
+                <td>${direccion}</td>
+                <td>${coordenadas}</td>
+                <td>${contacto}</td>
+                <td>${telefono}</td>
+            `;
+
+            tbody.appendChild(fila);
+        });
+    });
 }
