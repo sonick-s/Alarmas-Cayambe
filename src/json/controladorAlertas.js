@@ -1,6 +1,9 @@
 import { getAllAlerts, updateAlert } from "./crudAlertas.js";
 import { getAllAlarmas } from "./crudAlarmas.js";
 
+let markerAlarma = null; // marcador global para la alarma actual
+let grupoMarcadores = null;
+
 async function mostrarAlertas() {
   try {
     const alertitas = await getAllAlerts();
@@ -12,12 +15,12 @@ async function mostrarAlertas() {
   }
 }
 
-    // Importar la barra de navegacion en el contenedor correspondiente
-    fetch('Nav.html')
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('nav-container').innerHTML = html;
-        });
+// Importar la barra de navegacion en el contenedor correspondiente
+fetch('Nav.html')
+    .then(response => response.text())
+    .then(html => {
+        document.getElementById('nav-container').innerHTML = html;
+    });
 
 document.addEventListener("DOMContentLoaded", function () {
   async function handleAlertUpdate() {
@@ -79,7 +82,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   }
 
-  initMap([0.04103, -78.14636], 7);
+  initMap([0.04103, -78.14636], 14);
   createDefaultMarker(alertas[0]);
 
   const contenedor = document.getElementById("contenedor-alertas");
@@ -100,7 +103,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const lat = parseFloat(alerta.lat);
     const lng = parseFloat(alerta.lng);
     const radarIcon = L.icon({
-      iconUrl: '../assets/img/advertencia.gif',
+      iconUrl: '../assets/img/alerta.gif',
       iconSize: [50, 50], // Tamaño del icono
       iconAnchor: [16, 16], // Ancla el icono en el centro
       popupAnchor: [0, -16] // Ajusta la posición del popup
@@ -111,7 +114,9 @@ document.addEventListener("DOMContentLoaded", async function () {
       .bindPopup(`Alerta ${alerta.id}<br>${alerta.ubicacion}`)
       .openPopup();
       // Mostrar la alarma más cercana dentro de 10 km
-  mostrarAlarmaMasCercana(lat, lng);
+      mostrarUbicacionesEnMapa();
+      mostrarAlarmaMasCercana(lat, lng);
+ 
   }
 
   // Función para crear la tarjeta de alerta en el DOM
@@ -159,13 +164,13 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
     const radarIcon = L.icon({
-      iconUrl: '../assets/img/advertencia.gif',
-      iconSize: [50, 50], // Tamaño del icono
+      iconUrl: '../assets/img/alerta.gif',
+      iconSize: [40, 40], // Tamaño del icono
       iconAnchor: [16, 16], // Ancla el icono en el centro
       popupAnchor: [0, -16] // Ajusta la posición del popup
     });
 
-    map.setView([lat, lng], 16);
+    map.setView([lat, lng], 18);
     marker.setLatLng([lat, lng])
       .setIcon(radarIcon)
       .setPopupContent(`Alerta ${alerta.id}<br>${alerta.ubicacion}`)
@@ -194,6 +199,8 @@ function calcularDistancia(lat1, lon1, lat2, lon2) {
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c; // Distancia en metros
 }
+
+// Función para mostrar la alarma más cercana
 async function mostrarAlarmaMasCercana(latReferencia, lonReferencia) {
   const alarmas = await getAllAlarmas();
 
@@ -222,11 +229,56 @@ async function mostrarAlarmaMasCercana(latReferencia, lonReferencia) {
   if (alarmaMasCercana) {
     console.log(`Alarma más cercana (ID: ${alarmaMasCercana.id}) a ${distanciaMinima.toFixed(2)} m`);
 
-    L.marker([alarmaMasCercana.lat, alarmaMasCercana.lng])
+    // Definir el icono del marcador con color personalizado
+    const marcadorIcono = L.icon({
+      iconUrl: '../assets/img/ubicacion.gif',  // Puedes usar tu propia URL de ícono o uno predeterminado de Leaflet
+      iconSize: [50, 50],  // Tamaño del icono
+      iconAnchor: [16, 16],  // Ancla del icono (donde estará el "pico" del marcador)
+      popupAnchor: [0, -16],  // Donde se abre el popup respecto al marcador
+      iconColor: 'red'  // Aquí puedes poner el color que prefieras (ej. 'red', 'blue', etc.)
+    });
+
+    // Crear el marcador con el icono personalizado
+    L.marker([alarmaMasCercana.lat, alarmaMasCercana.lng], { icon: marcadorIcono })
       .addTo(map)
       .bindPopup(`Alarma más cercana<br>ID: ${alarmaMasCercana.id}<br>${alarmaMasCercana.ubicacion}`)
       .openPopup();
   } else {
     console.log("No hay alarmas dentro de un radio de 10 km.");
   }
+}
+
+
+// Función para obtener y mostrar las ubicaciones en el mapa
+function mostrarUbicacionesEnMapa() {
+  getAllAlarmas().then(alarmas => {
+      if (!map) return;
+
+      // Guardar las ubicaciones en la variable global grupoMarcadores
+      grupoMarcadores = alarmas
+          .filter(alarma => alarma.lat && alarma.lng)
+          .map(alarma => ({
+              lat: alarma.lat,
+              lng: alarma.lng,
+              name: alarma.name || '',
+              description: alarma.description || ''
+          }));
+      
+      console.log('Ubicaciones usadas en el mapa:', grupoMarcadores);
+
+      if (map._grupoMarcadoresLayer) {
+          map.removeLayer(map._grupoMarcadoresLayer);
+      }
+
+      const layerGroup = L.layerGroup();
+      
+      grupoMarcadores.forEach(ubi => {
+          const marker = L.marker([parseFloat(ubi.lat), parseFloat(ubi.lng)])
+              .bindPopup(`<b>${ubi.name}</b><br>${ubi.description}`);
+          layerGroup.addLayer(marker);
+      });
+      
+      layerGroup.addTo(map);
+      map._grupoMarcadoresLayer = layerGroup;
+  });
 }

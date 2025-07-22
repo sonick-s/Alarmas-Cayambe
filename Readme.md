@@ -39,4 +39,8 @@ Tareas
 - [*] configurar una forma de consumir el firebas
 - [*] configurar un crud para las alertas
 - [*] servir el json extraido desde firebase a las tagetas
+- [*] Visualizar todas las alarmas en insidencias 
+- [*] Cuando se active una alerta que cambie de color la alarma mas cercana. 
+- [ ] Colocar un boton para mostrar en un modal todas las alertas generadas.
+- [ ] Quitar boton de google
 

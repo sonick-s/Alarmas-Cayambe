@@ -10,6 +10,58 @@
     <script type="module" src="../json/controladorAlertas.js"></script>
     <link rel="stylesheet" href="../css/vistaInsidencia.css">
 </head>
+
+<style>
+    /* Botón personalizado */
+.boton-historial {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    border: none;
+    background-color: #ffffff;
+    color: #1a237e;
+    height: auto;
+    cursor: pointer;
+}
+
+/* Fondo del modal */
+.modal-historial {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    right: 0;
+    bottom: 0; /* En lugar de top: 0 */
+    width: 400px;
+    height: 90%; /* Ajusta la altura si no quieres que sea de 100% */
+    max-height: 88%; /* Opcional: para evitar que ocupe toda la pantalla */
+    background-color: #ffffff;
+    box-shadow: -4px 0 10px rgba(0,0,0,0.2);
+    overflow-y: auto;
+    transition: transform 0.3s ease;
+    border-radius: 5% 0 0 0; /* Esquinas redondeadas solo arriba a la izquierda */
+}
+
+
+/* Contenido interno del modal */
+.modal-contenido {
+    padding: 20px;
+    position: relative;
+}
+
+/* Botón de cerrar */
+.cerrar-modal {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+}
+
+</style>
 <body>
     <!-- contenedor del Mapa -->
     <div class="container">
@@ -22,10 +74,18 @@
 
     <div class="floating-bar">
         <h3 style="text-align:center">Información de la Alertas</h3>
-            <div id="contenedor-alertas" style="max-height: 600px; overflow-y: auto; margin-bottom: 10px;"></div>
-            <footer>
-                <p> 2025 Alarma Emart ECU911 de<a href="https://www.linkedin.com/in/omar-sani-b9733a2b9/" target="_blank"> Omar Sani</a> </p>
-            </footer>
+        <div id="contenedor-alertas" style="max-height: 600px; overflow-y: auto; margin-bottom: 10px;"></div>
+        <!-- Botón con una imagen -->
+        <button id="boton_historial" class="boton-historial">
+            <img src="../assets/img/historial.png" alt="Mostrar Información"
+                style="width: 30px; height: 30px; cursor: pointer;">
+        </button>
+
+        <footer>
+            <p> 2025 Alarma Emart ECU911
+                <!-- <a href="https://www.linkedin.com/in/omar-sani-b9733a2b9/" target="_blank"> de Omar Sani</a>-->
+            </p>
+        </footer>
     </div>
 
     <div class="detalle-alerta">
@@ -37,6 +97,64 @@
         <p><strong>Contacto:</strong> <span id="alerta-contacto"></span></p>
         <p><strong>Teléfono:</strong> <span id="alerta-telefono"></span></p>
         <input type="button" id="alerta-button" value="Atender Alerta">
-      </div>
+    </div>
+
+<!-- Modal a la derecha -->
+<div id="modal_historial" class="modal-historial">
+    <div class="modal-contenido">
+        <span id="cerrar_modal" class="cerrar-modal">&times;</span>
+        <h2>Historial</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Hora</th>
+                    <th>Dirección</th>
+                    <th>Coordenadas</th>
+                    <th>Contacto</th>
+                    <th>Teléfono</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2025-07-22 16:54:04</td>
+                    <td>123 Main St</td>
+                    <td>40.7128° N, 74.0060° W</td>
+                    <td>John Doe</td>
+                    <td>123-456-7890</td>
+                </tr>
+                <tr>
+                    <td>2025-07-22 16:54:04</td>
+                    <td>123 Main St</td>
+                    <td>40.7128° N, 74.0060° W</td>
+                    <td>John Doe</td>
+                    <td>123-456-7890</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- JavaScript para manejar la apertura/cierre del modal -->
+<script>
+    const boton = document.getElementById("boton_historial");
+    const modal = document.getElementById("modal_historial");
+    const cerrar = document.getElementById("cerrar_modal");
+
+    boton.addEventListener("click", () => {
+        modal.style.display = "block";
+    });
+
+    cerrar.addEventListener("click", () => {
+        modal.style.display = "none";
+    });
+
+    // Cerrar el modal si se hace clic fuera del contenido
+    window.addEventListener("click", (e) => {
+        if (e.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+</script>
 </body>
+
 </html>
