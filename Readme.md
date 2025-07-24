@@ -42,9 +42,9 @@ Tareas
 - [*] Visualizar todas las alarmas en insidencias 
 - [*] Cuando se active una alerta que cambie de color la alarma mas cercana. 
 - [*] Colocar un boton para mostrar en un modal todas las alertas generadas.
-- [ ] Quitar boton de google
-- [ ] Crear el Registrar de usuarios
-- [ ] Crear Login Para Usuarios Asignando Roles
+- [*] Quitar boton de google
+- [*] Crear el Registrar de usuarios
+- [*] Crear Login Para Usuarios Asignando Roles
 - [ ] Incluir Css para reportes
 - [ ] Colar 1 o 0 para que la alarma se active o desactive
 - [ ] Quitra insidencia mas sercana de todas las alarmas
