@@ -2,6 +2,17 @@ import { createAlarma, subscribeAlarmas, getAlarmaById, updateAlarma, getAllAlar
 let map;
 let markerAlarma = null; // marcador global para la alarma actual
 let grupoMarcadores = null;
+
+//Verificar si registrado antes de ingresar a la pagina
+document.addEventListener("DOMContentLoaded", () => {
+    const usuario = JSON.parse(localStorage.getItem("usuario911"));
+  
+    if (!usuario) {
+      window.location.href = "../../index.html";
+    }
+  });
+  
+
 // Inicializar el mapa
 function initMap() {
     //Ubicacion ecuador CAYAMBE
