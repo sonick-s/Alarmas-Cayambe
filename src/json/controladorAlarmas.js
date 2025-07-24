@@ -1,9 +1,9 @@
 import { createAlarma, subscribeAlarmas, getAlarmaById, updateAlarma, getAllAlarmas, deleteAlarma } from "./crudAlarmas.js";
 let map;
-let markerAlarma = null; // marcador global para la alarma actual
+let markerAlarma = null; 
 let grupoMarcadores = null;
 
-//Verificar si registrado antes de ingresar a la pagina
+//Verificar si esta registrado antes de ingresar a la pagina
 document.addEventListener("DOMContentLoaded", () => {
     const usuario = JSON.parse(localStorage.getItem("usuario911"));
   
@@ -117,6 +117,14 @@ fetch('Nav.html')
 .then(response => response.text())
 .then(html => {
   document.getElementById('nav-container').innerHTML = html;
+
+  const btnCerrarSesion = document.getElementById('btnCerrarSesion');
+    if (btnCerrarSesion) {
+      btnCerrarSesion.addEventListener('click', () => {
+        localStorage.removeItem("usuario911");
+        window.location.href = "../../index.html";
+      });
+    }
 });
 
 // Función para renderizar tarjetas de alarmas en el contenedor

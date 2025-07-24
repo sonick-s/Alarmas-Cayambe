@@ -6,7 +6,7 @@
   <div class="nav-title">Alarma Emart ECU911</div>
   <button class="nav-btn" onclick="location.href='vistaAlarmas.html'">Alarma</button>
   <button class="nav-btn" onclick="location.href='vistaInsidencias.html'">Insidencia</button>
-  <button class="btn-danger" onclick="cerrarSesion()">Cerrar Sesión</button>
+  <button class="btn-danger" id="btnCerrarSesion">Cerrar Sesión</button>
 </nav>
 
 <style>
@@ -81,7 +81,7 @@
   }
 </style>
 
-<script>
+<script type="module">
   function cerrarSesion() {
     localStorage.removeItem("usuario911");
     window.location.href = "../../index.html";

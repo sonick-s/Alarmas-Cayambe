@@ -12,10 +12,6 @@ la base tecnica de este fue html Css y JavaScript , Como bakend se uso Firebase 
 ## Contribuidores
 
 1. [Omar Sani](https://github.com/sonick-s/)
-2. [Darwin Campues](https://github.com/sonick-s/)
-3. [Micheale Garcia](https://github.com/sonick-s/)
-4. [Stalin Fernandez](https://github.com/sonick-s/)
-5. [Anonimo](https://github.com/sonick-s/)
 
 ## Deploy
 
@@ -45,7 +41,7 @@ Tareas
 - [*] Quitar boton de google
 - [*] Crear el Registrar de usuarios
 - [*] Crear Login Para Usuarios Asignando Roles
-- [ ] Incluir Css para reportes
+- [*] Incluir Css para reportes
 - [ ] Colar 1 o 0 para que la alarma se active o desactive
 - [ ] Quitra insidencia mas sercana de todas las alarmas
 

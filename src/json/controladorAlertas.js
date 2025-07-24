@@ -3,6 +3,7 @@ import { getAllAlarmas } from "./crudAlarmas.js";
 
 let markerAlarma = null; // marcador global para la alarma actual
 let grupoMarcadores = null;
+let alarmaMasCercana = null;
 
 async function mostrarAlertas() {
   try {
@@ -20,6 +21,14 @@ fetch('Nav.html')
     .then(response => response.text())
     .then(html => {
         document.getElementById('nav-container').innerHTML = html;
+
+        const btnCerrarSesion = document.getElementById('btnCerrarSesion');
+    if (btnCerrarSesion) {
+      btnCerrarSesion.addEventListener('click', () => {
+        localStorage.removeItem("usuario911");
+        window.location.href = "../../index.html";
+      });
+    }
     });
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -54,9 +63,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const alertaButton = document.getElementById("alerta-button");
   alertaButton.addEventListener("click", handleAlertUpdate);
 });
-
-
-
 
 
 //Desde aqui empieza la funcion para mostrarla en las targetas y en el mapa
@@ -134,6 +140,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     mostrarUbicacionesEnMapa();
     mostrarAlarmaMasCercana(lat, lng);
+    
+
   }
 
   function crearTarjetaAlerta(alerta) {
@@ -223,9 +231,8 @@ function calcularDistancia(lat1, lon1, lat2, lon2) {
 
 // Función para mostrar la alarma más cercana
 async function mostrarAlarmaMasCercana(latReferencia, lonReferencia) {
-  const alarmas = await getAllAlarmas();
 
-  let alarmaMasCercana = null;
+  const alarmas = await getAllAlarmas();
   let distanciaMinima = Infinity;
 
   for (const alarma of alarmas) {
@@ -252,11 +259,11 @@ async function mostrarAlarmaMasCercana(latReferencia, lonReferencia) {
 
     // Definir el icono del marcador con color personalizado
     const marcadorIcono = L.icon({
-      iconUrl: '../assets/img/ubicacion.gif',  // Puedes usar tu propia URL de ícono o uno predeterminado de Leaflet
-      iconSize: [50, 50],  // Tamaño del icono
-      iconAnchor: [16, 16],  // Ancla del icono (donde estará el "pico" del marcador)
-      popupAnchor: [0, -16],  // Donde se abre el popup respecto al marcador
-      iconColor: 'red'  // Aquí puedes poner el color que prefieras (ej. 'red', 'blue', etc.)
+      iconUrl: '../assets/img/ubicacion.gif',
+      iconSize: [50, 50],
+      iconAnchor: [16, 16],
+      popupAnchor: [0, -16],
+      iconColor: 'red'
     });
 
     // Crear el marcador con el icono personalizado
@@ -267,42 +274,54 @@ async function mostrarAlarmaMasCercana(latReferencia, lonReferencia) {
   } else {
     console.log("No hay alarmas dentro de un radio de 10 km.");
   }
+  if (!alarmaMasCercana) return;
 }
 
 
 // Función para obtener y mostrar las ubicaciones en el mapa
 function mostrarUbicacionesEnMapa() {
+  if (!alarmaMasCercana) {
+    console.warn("alarmaMasCercana no está definida. No se mostrarán ubicaciones.");
+    return;
+  }
+
+  const latExcluida = alarmaMasCercana.lat;
+  const lngExcluida = alarmaMasCercana.lng;
+
   getAllAlarmas().then(alarmas => {
-      if (!map) return;
+    if (!map) return;
 
-      // Guardar las ubicaciones en la variable global grupoMarcadores
-      grupoMarcadores = alarmas
-          .filter(alarma => alarma.lat && alarma.lng)
-          .map(alarma => ({
-              lat: alarma.lat,
-              lng: alarma.lng,
-              name: alarma.name || '',
-              description: alarma.description || ''
-          }));
-      
-      console.log('Ubicaciones usadas en el mapa:', grupoMarcadores);
+    grupoMarcadores = alarmas
+      .filter(alarma =>
+        alarma.lat && alarma.lng &&
+        !(parseFloat(alarma.lat) === latExcluida && parseFloat(alarma.lng) === lngExcluida)
+      )
+      .map(alarma => ({
+        lat: alarma.lat,
+        lng: alarma.lng,
+        name: alarma.name || '',
+        description: alarma.description || ''
+      }));
 
-      if (map._grupoMarcadoresLayer) {
-          map.removeLayer(map._grupoMarcadoresLayer);
-      }
+    console.log('Ubicaciones usadas en el mapa:', grupoMarcadores);
 
-      const layerGroup = L.layerGroup();
-      
-      grupoMarcadores.forEach(ubi => {
-          const marker = L.marker([parseFloat(ubi.lat), parseFloat(ubi.lng)])
-              .bindPopup(`<b>${ubi.name}</b><br>${ubi.description}`);
-          layerGroup.addLayer(marker);
-      });
-      
-      layerGroup.addTo(map);
-      map._grupoMarcadoresLayer = layerGroup;
+    if (map._grupoMarcadoresLayer) {
+      map.removeLayer(map._grupoMarcadoresLayer);
+    }
+
+    const layerGroup = L.layerGroup();
+
+    grupoMarcadores.forEach(ubi => {
+      const marker = L.marker([parseFloat(ubi.lat), parseFloat(ubi.lng)])
+        .bindPopup(`<b>${ubi.name}</b><br>${ubi.description}`);
+      layerGroup.addLayer(marker);
+    });
+
+    layerGroup.addTo(map);
+    map._grupoMarcadoresLayer = layerGroup;
   });
 }
+
 const boton = document.getElementById("boton_historial");
 const modal = document.getElementById("modal_historial");
 const cerrar = document.getElementById("cerrar_modal");
