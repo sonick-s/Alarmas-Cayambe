@@ -1,4 +1,4 @@
-import { createAlarma, subscribeAlarmas, getAlarmaById, updateAlarma, getAllAlarmas } from "./crudAlarmas.js";
+import { createAlarma, subscribeAlarmas, getAlarmaById, updateAlarma, getAllAlarmas, deleteAlarma } from "./crudAlarmas.js";
 let map;
 let markerAlarma = null; // marcador global para la alarma actual
 let grupoMarcadores = null;
@@ -74,30 +74,29 @@ function capturarDatosForm(event){
     alarma.timestamp = new Date().toISOString();
     alarma.estado = false;
 
-    if (window.idAlarmaEditar) {
-        // EDITAR
-        updateAlarma(window.idAlarmaEditar, alarma).then((ok) => {
-            if (ok) {
-                alert("Ubicación actualizada correctamente");
-                closeLocationModal();
-                form.reset();
-                window.idAlarmaEditar = null;
-            } else {
-                alert("Error al actualizar la ubicación");
-            }
-        });
-    } else {
-        // CREAR
-        createAlarma(alarma).then((id) => {
-            if (id) {
-                alert("Ubicación guardada correctamente");
-                closeLocationModal();
-                form.reset();
-            } else {
-                alert("Error al guardar la ubicación");
-            }
-        });
-    }
+    function handleAlarmaResponse(success, action) {
+    const message = success 
+        ? (action === 'edit' ? 'Ubicación actualizada correctamente' : 'Ubicación guardada correctamente') 
+        : (action === 'edit' ? 'Error al actualizar la ubicación' : 'Error al guardar la ubicación');
+    
+    alert(message);
+    closeLocationModal();
+    form.reset();
+}
+
+if (window.idAlarmaEditar) {
+    // EDITAR
+    updateAlarma(window.idAlarmaEditar, alarma).then((ok) => {
+        handleAlarmaResponse(ok, 'edit');
+        if (ok) window.idAlarmaEditar = null;
+    });
+} else {
+    // CREAR
+    createAlarma(alarma).then((id) => {
+        handleAlarmaResponse(id, 'create');
+    });
+}
+
 }
 
 window.capturarDatosForm = capturarDatosForm;
@@ -144,7 +143,38 @@ function renderizarAlarmas(alarmasObj) {
             console.error('No se pudo cargar la alarma');
         }
     }
-
+// funcion para eliminar la alarma
+    window.eliminarAlarma = async function(id) {
+        const confirmacion = confirm("¿Estás seguro de que quieres eliminar esta alarma?");
+        
+        if (confirmacion) {
+            if (typeof deleteAlarma === 'function') {
+                try {
+                    const resultado = await deleteAlarma(id);
+                    if (resultado) {
+                        alert("Alarma eliminada exitosamente.");
+                        const alarmaElemento = document.getElementById(id);
+                        if (alarmaElemento) {
+                            alarmaElemento.remove(); 
+                        }
+                        location.reload(); 
+                    } else {
+                        alert("Hubo un problema al eliminar la alarma.");
+                    }
+                } catch (error) {
+                    console.error("Error eliminando alarma:", error);
+                    alert("Hubo un error al intentar eliminar la alarma.");
+                }
+            } else {
+                console.error("La función deleteAlarma no está disponible.");
+                alert("No se pudo eliminar la alarma.");
+            }
+        } else {
+            console.log("Eliminación cancelada.");
+        }
+    };
+    
+    
     const contenedor = document.getElementById('contenedor-alarmas');
     if (!contenedor) return;
     contenedor.innerHTML = '';
@@ -172,6 +202,16 @@ function renderizarAlarmas(alarmasObj) {
                         <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
                     </svg>
                 </button>
+                <button title="Borrar" style="background:none; border:none; cursor:pointer; font-size:1.3em; padding:4px;" onclick="eliminarAlarma('${id}')">
+                    <svg height="20" width="20" viewBox="0 0 24 24" fill="none" stroke="red" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 6h18" />
+                        <path d="M8 6v-1a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1" />
+                        <path d="M5 6h14l1 14H4L5 6z" />
+                        <path d="M9 10v6" />
+                        <path d="M15 10v6" />
+                    </svg>
+                </button>
+
             </div>
         `;
         // Botón "Ver ubicación"
@@ -187,6 +227,7 @@ function renderizarAlarmas(alarmasObj) {
         }
         contenedor.appendChild(tarjeta);
     });
+    
 }
 
 //Crea una funcion usando getAllAlarmas para mostrar las ubicaciones en el mapa al cargar el documento
@@ -216,3 +257,4 @@ window.addEventListener('load', () => {
         map._grupoMarcadoresLayer = layerGroup;
     });
 });
+  

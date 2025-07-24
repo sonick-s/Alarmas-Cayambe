@@ -262,7 +262,7 @@ async function mostrarAlarmaMasCercana(latReferencia, lonReferencia) {
     // Crear el marcador con el icono personalizado
     L.marker([alarmaMasCercana.lat, alarmaMasCercana.lng], { icon: marcadorIcono })
       .addTo(map)
-      .bindPopup(`Alarma más cercana<br>ID: ${alarmaMasCercana.id}<br>${alarmaMasCercana.ubicacion}`)
+      .bindPopup(`Alarma más cercana<br>Name: ${alarmaMasCercana.name}<br>${alarmaMasCercana.ubicacion}`)
       .openPopup();
   } else {
     console.log("No hay alarmas dentro de un radio de 10 km.");
