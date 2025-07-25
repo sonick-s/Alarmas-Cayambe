@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const lat = parseFloat(alerta.lat);
     const lng = parseFloat(alerta.lng);
     const radarIcon = L.icon({
-      iconUrl: '../assets/img/alerta.gif',
+      iconUrl: '../assets/img/ubicacion.png',
       iconSize: [50, 50],
       iconAnchor: [16, 16],
       popupAnchor: [0, -16]
@@ -187,7 +187,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const lng = parseFloat(alerta.lng);
 
     const radarIcon = L.icon({
-      iconUrl: '../assets/img/alerta.gif',
+      iconUrl: '../assets/img/ubicacion.png',
       iconSize: [40, 40],
       iconAnchor: [16, 16],
       popupAnchor: [0, -16]
@@ -258,7 +258,7 @@ async function mostrarAlarmaMasCercana(latReferencia, lonReferencia) {
   if (alarmaMasCercana) {
     console.log(`Alarma más cercana (ID: ${alarmaMasCercana.id}) a ${distanciaMinima.toFixed(2)} m`);
     const marcadorIcono = L.icon({
-      iconUrl: '../assets/img/ubicacion.gif',
+      iconUrl: '../assets/img/alarma.png',
       iconSize: [50, 50],
       iconAnchor: [16, 16],
       popupAnchor: [0, -16],
