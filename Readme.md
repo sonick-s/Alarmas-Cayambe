@@ -43,6 +43,10 @@ Tareas
 - [*] Crear Login Para Usuarios Asignando Roles
 - [*] Incluir Css para reportes
 - [ ] Colar 1 o 0 para que la alarma se active o desactive
-- [ ] Quitra insidencia mas sercana de todas las alarmas
+- [*] Mostar todas las alarmas al iniciar la pagina de Insidencias
+- [*] Separar el registro de usuarios en paginas diferentes
+
+
+
 
 
